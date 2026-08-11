@@ -56,14 +56,31 @@ The app refuses to start without `SCOUT_API_TOKEN` and `GOOGLE_ROUTES_API_KEY`.
 
 ## Run with Docker
 
+Pull the published image from GHCR:
+
 ```bash
-docker build -t scout:dev .
+docker pull ghcr.io/belovai/scout:latest
+```
+
+Run with `-e` flags:
+
+```bash
 docker run --rm -d --name scout -p 8080:8080 \
   -e SCOUT_API_TOKEN=change-me \
   -e GOOGLE_ROUTES_API_KEY=change-me \
   -e APP_SECRET=change-me \
-  scout:dev
+  ghcr.io/belovai/scout:latest
 ```
+
+Or with an env file (one `KEY=VALUE` per line, no `export`, no quotes needed):
+
+```bash
+docker run --rm -d --name scout -p 8080:8080 --env-file .env ghcr.io/belovai/scout:latest
+```
+
+`--env-file` only sets process environment variables inside the container — it does not mount or create a `.env` file on disk. Values passed this way (or via `-e`) always take precedence over the placeholder `.env` baked into the image.
+
+Available tags: `latest` (default branch), `main`, `sha-<commit>`, and semver tags (`vX.Y.Z` pushes).
 
 ## Run locally
 
