@@ -40,7 +40,7 @@ final class RouteControllerTest extends WebTestCase
     {
         [$client, $fake] = $this->clientWith(new RouteResult(12450, 1080));
 
-        $this->post($client, '{"points":["example address","0.0000, 0.0000","example destination"]}');
+        $this->post($client, '{"points":["example address","12.3456, 65.4321","example destination"]}');
 
         self::assertResponseStatusCodeSame(200);
         self::assertSame(
@@ -48,7 +48,7 @@ final class RouteControllerTest extends WebTestCase
             $this->json($client),
         );
         self::assertSame(
-            ['example address', '0.0000, 0.0000', 'example destination'],
+            ['example address', '12.3456, 65.4321', 'example destination'],
             $fake->lastPoints,
         );
     }

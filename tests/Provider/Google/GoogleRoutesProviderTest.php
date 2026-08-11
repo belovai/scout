@@ -115,11 +115,11 @@ final class GoogleRoutesProviderTest extends TestCase
             'test-key',
         );
 
-        $provider->computeRoute(['0.0000, 0.0000', '-33.8688,151.2093']);
+        $provider->computeRoute(['12.3456, 65.4321', '-33.8688,151.2093']);
         $body = $this->capturedBody();
 
         self::assertSame(
-            ['location' => ['latLng' => ['latitude' => 0.0000, 'longitude' => 0.0000]]],
+            ['location' => ['latLng' => ['latitude' => 12.3456, 'longitude' => 65.4321]]],
             $body['origin'],
         );
         self::assertSame(
