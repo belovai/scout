@@ -1,0 +1,27 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/Kernel.php'
+
+    App\Provider\Google\GoogleRoutesProvider:
+        arguments:
+            $httpClient: '@http_client'
+            $apiKey: '%env(GOOGLE_ROUTES_API_KEY)%'
+
+    App\Provider\RouteProvider: '@App\Provider\Google\GoogleRoutesProvider'
+
+    App\Http\TokenListener:
+        arguments:
+            $apiToken: '%env(SCOUT_API_TOKEN)%'
+
+when@test:
+    services:
+        App\Provider\RouteProvider:
+            alias: App\Provider\Google\GoogleRoutesProvider
+            public: true
+

@@ -1,0 +1,11 @@
+framework:
+    secret: '%env(default::APP_SECRET)%'
+    http_method_override: false
+    test: '%kernel.debug%'
+    php_errors:
+        log: true
+    http_client: {}
+
+when@test:
+    framework:
+        test: true
