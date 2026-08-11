@@ -14,7 +14,7 @@ COPY --from=vendor /app/vendor ./vendor
 COPY config ./config
 COPY public ./public
 COPY src ./src
-COPY composer.json composer.lock .env ./
+COPY composer.json composer.lock .env.example ./
 
 RUN mkdir -p var && chown -R www-data:www-data var
 
