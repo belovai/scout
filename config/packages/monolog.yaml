@@ -1,9 +1,10 @@
 monolog:
     handlers:
+        # Not `type: stream` -- the stream handler is wrapped by
+        # App\Log\ProbeFilterHandler, which drops the /healthz probe lines.
         main:
-            type: stream
-            path: 'php://stderr'
-            level: info
+            type: service
+            id: App\Log\ProbeFilterHandler
 
 when@test:
     monolog:

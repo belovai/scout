@@ -30,7 +30,9 @@ src/Provider/RouteResult.php                     # immutable result value object
 src/Provider/Exception/NoRouteException.php      # no route found
 src/Provider/Exception/ProviderException.php     # transport/quota/provider failure
 src/Provider/Google/GoogleRoutesProvider.php     # all Google-specific request/response handling
+src/Log/ProbeFilterHandler.php                   # Monolog handler wrapper, drops /healthz probe lines
 config/services.yaml                             # DI wiring, RouteProvider → GoogleRoutesProvider alias
+config/packages/monolog.yaml                     # main handler = the probe filter, not a plain stream
 ```
 
 No import cycles. `RouteController` and `RouteProvider` depend on nothing Google-specific.
@@ -43,6 +45,9 @@ No import cycles. `RouteController` and `RouteProvider` depend on nothing Google
 - Provider error text never reaches an HTTP response body; it goes to the log only (`ProviderException`/`NoRouteException` messages may contain provider detail — the controller maps them to fixed generic messages).
 - Env prefix `SCOUT_` for our own variables. App refuses to start without `SCOUT_API_TOKEN` and `GOOGLE_ROUTES_API_KEY` (`EnvGuard`).
 - No persistence, no cache, no scheduling, no message formatting — those belong to other services.
+- Probe traffic must not reach the log. `GET /healthz` runs every ten seconds per replica; its
+  `request.INFO` lines are filtered by `ProbeFilterHandler`. Warning and above always pass, probe
+  path or not.
 - No git write operations in this project unless explicitly asked.
 
 ---

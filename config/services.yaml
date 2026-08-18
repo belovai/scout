@@ -19,6 +19,21 @@ services:
         arguments:
             $apiToken: '%env(SCOUT_API_TOKEN)%'
 
+    # The stderr sink the probe filter wraps. Defined here, not in monolog.yaml,
+    # because the bundle's own handler config cannot express "wrap this one".
+    scout.log.stderr:
+        class: Monolog\Handler\StreamHandler
+        autowire: false
+        arguments:
+            $stream: 'php://stderr'
+            $level: !php/const Monolog\Level::Info
+
+    App\Log\ProbeFilterHandler:
+        autowire: false
+        arguments:
+            $inner: '@scout.log.stderr'
+            $probePath: '/healthz'
+
 when@test:
     services:
         App\Provider\RouteProvider:
